@@ -1,20 +1,21 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-import Root from "./routes/root";
-import ErrorPage from "./errorPage";
-
-const router = createBrowserRouter([{
-  path: '/',
-  element: <Root />,
-  errorElement: <ErrorPage />,
-}]);
+const Home = lazy(() => import('./pages/Home'));
+const Todo = lazy(() => import('./pages/Todo'));
+const Loading = lazy(() => import('./pages/Loading'));
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route path='/'>
+          <Route index element={<Home />} />
+          <Route path='todo' element={<Todo />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  )
 }
 
 export default App;
